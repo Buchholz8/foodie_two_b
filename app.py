@@ -16,18 +16,8 @@ def post_client():
     
 @app.get("/api/client")
 def get_client():
-    client_id = request.args.get("client_id")
-    
-    if client_id is None:
-        return make_response(jsonify("Client ID is missing"), 400)
-    
-    try:
-        client_id = int(client_id)
-    except ValueError:
-        return make_response(jsonify("Invalid Client ID"), 400)
-
-    results = dbhelpers.run_procedures("CALL client_get(?)", [client_id])
-    
+    token = request.args.get("token")
+    results = dbhelpers.run_procedures("CALL client_get(?)", [token])
     if isinstance(results, list):
         return make_response(jsonify(results), 200)
     else:
@@ -102,19 +92,9 @@ def post_restaurant():
         return make_response(jsonify("sorry, something went wrong"))
     
 @app.get("/api/restaurant")
-@app.get("/api/client")
 def get_restaurant():
-    restaurant_id = request.args.get("restaurant_id")
-    
-    if restaurant_id is None:
-        return make_response(jsonify("Restaurant ID is missing"), 400)
-    
-    try:
-        restaurant_id = int(restaurant_id)
-    except ValueError:
-        return make_response(jsonify("Invalid Restaurant ID"), 400)
-
-    results = dbhelpers.run_procedures("CALL restaurant_get(?)", [restaurant_id])
+    token = request.args.get("token")
+    results = dbhelpers.run_procedures("CALL restaurant_get(?)", [token])
     
     if isinstance(results, list):
         return make_response(jsonify(results), 200)
